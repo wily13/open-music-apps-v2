@@ -34,11 +34,11 @@ const getAllPlaylistMapDBToModel =
     ({
          id,
          name,
-         owner
+         username
      }) => ({
         id,
         name,
-        owner
+        username
     });
 
 module.exports = {mapDBToModel,getAllSongMapDBToModel,getAllPlaylistMapDBToModel};

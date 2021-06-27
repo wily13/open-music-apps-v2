@@ -1,8 +1,8 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsHandler {
-    constructor(service, validator) {
-        this._service = service;
+    constructor(playlistService, validator) {
+        this._playlistService = playlistService;
         this._validator = validator;
 
         this.postPlaylistHandler = this.postPlaylistHandler.bind(this);
@@ -17,9 +17,12 @@ class PlaylistsHandler {
         try {
             this._validator.validatePlaylistPayload(request.payload);
 
-            const {name, owner} = request.payload;
+            const {name} = request.payload;
+            const {id: credentialId} = request.auth.credentials;
 
-            const playlistId = await this._service.addPlaylist({name, owner});
+            const playlistId = await this._playlistService.addPlaylist({
+                name, owner: credentialId
+            });
 
             const response = h.response({
                 status: 'success',
@@ -35,16 +38,18 @@ class PlaylistsHandler {
         }
     }
 
-    async getPlaylistsHandler(h) {
+    async getPlaylistsHandler(request, h) {
         try {
-            const songs = await this._service.getPlaylists();
+            const {id: credentialId} = request.auth.credentials;
+
+            const playlists = await this._playlistService.getPlaylists(credentialId);
             return {
                 status: 'success',
                 data: {
-                    songs,
+                    playlists,
                 },
             };
-        }catch (error) {
+        } catch (error) {
             return this.handleErrorResponse(h, error);
         }
     }
@@ -52,7 +57,10 @@ class PlaylistsHandler {
     async deletePlaylistByIdHandler(request, h) {
         try {
             const {id} = request.params;
-            await this._service.deletePlaylistById(id);
+            const {id: credentialId} = request.auth.credentials;
+
+            await this._playlistService.verifyPlaylistOwner(id, credentialId);
+            await this._playlistService.deletePlaylistById(id);
             return {
                 status: 'success',
                 message: 'Playlist berhasil dihapus',
@@ -112,7 +120,7 @@ class PlaylistsHandler {
     // }
 
 
-    handleErrorResponse(h, error){
+    handleErrorResponse(h, error) {
         if (error instanceof ClientError) {
             const response = h.response({
                 status: 'fail',
