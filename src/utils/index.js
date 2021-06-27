@@ -19,7 +19,7 @@ const mapDBToModel =
         updatedAt: updated_at,
     });
 
-const getSongAllmapDBToModel =
+const getAllSongMapDBToModel =
     ({
          id,
          title,
@@ -30,4 +30,15 @@ const getSongAllmapDBToModel =
         performer
     });
 
-module.exports = {mapDBToModel,getSongAllmapDBToModel};
+const getAllPlaylistMapDBToModel =
+    ({
+         id,
+         name,
+         owner
+     }) => ({
+        id,
+        name,
+        owner
+    });
+
+module.exports = {mapDBToModel,getAllSongMapDBToModel,getAllPlaylistMapDBToModel};
