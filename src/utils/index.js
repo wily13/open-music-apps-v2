@@ -41,4 +41,15 @@ const getAllPlaylistMapDBToModel =
         username
     });
 
-module.exports = {mapDBToModel,getAllSongMapDBToModel,getAllPlaylistMapDBToModel};
+const getPlaylistSongMapDBToModel =
+    ({
+         id,
+         title,
+         performer
+     }) => ({
+        id,
+        title,
+        performer
+    });
+
+module.exports = {mapDBToModel,getAllSongMapDBToModel,getAllPlaylistMapDBToModel,getPlaylistSongMapDBToModel};

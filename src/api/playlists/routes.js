@@ -23,21 +23,21 @@ const routes = (handler) => [
             auth: 'songsapp_jwt',
         },
     },
-    // {
-    //     method: 'POST',
-    //     path: '/playlists/{playlistId}/songs',
-    //     handler: handler.postPlaylistSongHandler,
-    // },
-    // {
-    //     method: 'GET',
-    //     path: '/playlists/{playlistId}/songs',
-    //     handler: handler.getPlaylistsSongsHandler,
-    // },
-    // {
-    //     method: 'DELETE',
-    //     path: '/playlists/{playlistId}/songs',
-    //     handler: handler.deletePlaylistSongsByIdHandler,
-    // },
+    {
+        method: 'POST',
+        path: '/playlists/{playlistId}/songs',
+        handler: handler.postPlaylistSongHandler,
+    },
+    {
+        method: 'GET',
+        path: '/playlists/{playlistId}/songs',
+        handler: handler.getPlaylistsSongsHandler,
+    },
+    {
+        method: 'DELETE',
+        path: '/playlists/{playlistId}/songs',
+        handler: handler.deletePlaylistSongByIdHandler,
+    },
 ];
 
 module.exports = routes;
