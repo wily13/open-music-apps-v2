@@ -1,8 +1,9 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsHandler {
-    constructor(playlistsService, validator) {
+    constructor(playlistsService, handleErrorResponse, validator) {
         this._playlistsService = playlistsService;
+        this._handleErrorResponse = handleErrorResponse;
         this._validator = validator;
 
         this.postPlaylistHandler = this.postPlaylistHandler.bind(this);
@@ -31,7 +32,7 @@ class PlaylistsHandler {
             response.code(201);
             return response;
         } catch (error) {
-            return this.handleErrorResponse(h, error);
+            return  this._handleErrorResponse.errorResponse(h, error);
         }
     }
 
@@ -47,7 +48,7 @@ class PlaylistsHandler {
                 },
             };
         } catch (error) {
-            return this.handleErrorResponse(h, error);
+            return  this._handleErrorResponse.errorResponse(h, error);
         }
     }
 
@@ -63,30 +64,10 @@ class PlaylistsHandler {
                 message: 'Playlist berhasil dihapus',
             };
         } catch (error) {
-            return this.handleErrorResponse(h, error);
+            return  this._handleErrorResponse.errorResponse(h, error);
         }
     }
 
-
-    handleErrorResponse(h, error) {
-        if (error instanceof ClientError) {
-            const response = h.response({
-                status: 'fail',
-                message: error.message,
-            });
-            response.code(error.statusCode);
-            return response;
-        }
-
-        // Server ERROR!
-        const response = h.response({
-            status: 'error',
-            message: 'Maaf, terjadi kegagalan pada server kami.',
-        });
-        response.code(500);
-        console.error(error);
-        return response;
-    }
 }
 
 module.exports = PlaylistsHandler;

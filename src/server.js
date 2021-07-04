@@ -34,6 +34,9 @@ const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./services/postgres/CollaborationsService');
 const CollaborationsValidator = require('./validator/collaborations');
 
+// Handler error
+const handleErrorResponse = require('./utils/HandleErrorResponse');
+
 const init = async () => {
     const songsService = new SongsService();
     const usersService = new UsersService();
@@ -79,6 +82,7 @@ const init = async () => {
             plugin: songs,
             options: {
                 service: songsService,
+                handleErrorResponse,
                 validator: SongsValidator,
             },
         },
@@ -86,6 +90,7 @@ const init = async () => {
             plugin: users,
             options: {
                 service: usersService,
+                handleErrorResponse,
                 validator: UsersValidator,
             },
         },
@@ -94,6 +99,7 @@ const init = async () => {
             options: {
                 authenticationsService,
                 usersService,
+                handleErrorResponse,
                 tokenManager: TokenManager,
                 validator: AuthenticationsValidator,
             },
@@ -102,6 +108,7 @@ const init = async () => {
             plugin: playlists,
             options: {
                 playlistsService,
+                handleErrorResponse,
                 validator: PlaylistsValidator,
             },
         },
@@ -110,6 +117,7 @@ const init = async () => {
             options: {
                 playlistSongsService,
                 playlistsService,
+                handleErrorResponse,
                 validator: playlistSongsValidator,
             },
         },
@@ -118,6 +126,7 @@ const init = async () => {
             options: {
                 collaborationsService,
                 playlistsService,
+                handleErrorResponse,
                 validator: CollaborationsValidator,
             },
         },

@@ -7,12 +7,14 @@ module.exports = {
     register: async (server, {
         authenticationsService,
         usersService,
+        handleErrorResponse,
         tokenManager,
         validator,
     }) => {
         const authenticationsHandler = new AuthenticationsHandler(
             authenticationsService,
             usersService,
+            handleErrorResponse,
             tokenManager,
             validator,
         );
