@@ -1,8 +1,8 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsHandler {
-    constructor(playlistService, validator) {
-        this._playlistService = playlistService;
+    constructor(playlistsService, validator) {
+        this._playlistsService = playlistsService;
         this._validator = validator;
 
         this.postPlaylistHandler = this.postPlaylistHandler.bind(this);
@@ -17,7 +17,7 @@ class PlaylistsHandler {
             const {name} = request.payload;
             const {id: credentialId} = request.auth.credentials;
 
-            const playlistId = await this._playlistService.addPlaylist({
+            const playlistId = await this._playlistsService.addPlaylist({
                 name, owner: credentialId
             });
 
@@ -39,7 +39,7 @@ class PlaylistsHandler {
         try {
             const {id: credentialId} = request.auth.credentials;
 
-            const playlists = await this._playlistService.getPlaylists(credentialId);
+            const playlists = await this._playlistsService.getPlaylists(credentialId);
             return {
                 status: 'success',
                 data: {
@@ -56,8 +56,8 @@ class PlaylistsHandler {
             const {playlistId} = request.params;
             const {id: credentialId} = request.auth.credentials;
 
-            await this._playlistService.verifyPlaylistOwner(playlistId, credentialId);
-            await this._playlistService.deletePlaylistById(playlistId, credentialId);
+            await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+            await this._playlistsService.deletePlaylistById(playlistId, credentialId);
             return {
                 status: 'success',
                 message: 'Playlist berhasil dihapus',

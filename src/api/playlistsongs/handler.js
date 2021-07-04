@@ -1,8 +1,9 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistSongsHandler {
-    constructor(playlistSongService, validator) {
+    constructor(playlistSongService, playlistsService, validator) {
         this._playlistSongService = playlistSongService;
+        this._playlistsService = playlistsService;
         this._validator = validator;
 
         this.postPlaylistSongHandler = this.postPlaylistSongHandler.bind(this);
@@ -18,7 +19,8 @@ class PlaylistSongsHandler {
             const {songId} = request.payload;
             const {id: credentialId} = request.auth.credentials;
 
-            await this._playlistSongService.verifyPlaylistOwner(playlistId, credentialId);
+            await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
+            // await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
             const playlistSong = await this._playlistSongService.addPlaylistSong({songId, playlistId});
 
             const response = h.response({
@@ -41,7 +43,8 @@ class PlaylistSongsHandler {
             const {playlistId} = request.params;
             const {id: credentialId} = request.auth.credentials;
 
-            await this._playlistSongService.verifyPlaylistOwner(playlistId, credentialId);
+            await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
+            // await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
             const songs = await this._playlistSongService.getPlaylistSongs(playlistId, credentialId);
             return {
                 status: 'success',
@@ -60,7 +63,8 @@ class PlaylistSongsHandler {
             const {id: credentialId} = request.auth.credentials;
             const {songId} = request.payload;
 
-            await  this._playlistSongService.verifyPlaylistOwner(playlistId, credentialId);
+            await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
+            // await  this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
             await this._playlistSongService.deletePlaylistSongById(playlistId, songId);
             return {
                 status: 'success',
